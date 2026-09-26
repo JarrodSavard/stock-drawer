@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "status": "redistribution-unresolved",
+  "title": "S&P 500 stock data",
+  "publisher": "Cam Nugent",
+  "url": "https://www.kaggle.com/datasets/camnugent/sandp500",
+  "version": 4,
+  "publisherLicense": "CC0: Public Domain",
+  "upstream": "IEX API, according to the publisher's dataset description",
+  "upstreamTerms": "https://iextrading.com/apiexhibita/",
+  "reason": "The publisher's CC0 label does not resolve the upstream restriction on redistributing API data received through a third party.",
+  "bundledPrices": false,
+  "verifiedOn": "2026-09-25"
+}

@@ -1,0 +1,42 @@
+{
+  "name": "stock-drawer",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": {
+    "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
+  },
+  "scripts": {
+    "dev": "nuxt dev --host 127.0.0.1",
+    "build": "nuxt generate",
+    "preview": "sirv .output/public --host 127.0.0.1 --port 4173",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "test": "vitest run",
+    "test:unit": "vitest run --exclude tests/integration/**",
+    "test:integration": "vitest run tests/integration",
+    "test:browser": "playwright test",
+    "data:import": "tsx scripts/import-data.ts",
+    "benchmark": "tsx scripts/benchmark.ts",
+    "format:check": "prettier --check app shared scripts server tests *.ts *.json",
+    "verify:ui": "tsx scripts/verify-ui.ts",
+    "verify:static": "tsx scripts/verify-static.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.2.8",
+    "@fontsource/instrument-serif": "^5.2.8",
+    "nuxt": "4.5.2",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.58.0",
+    "@types/node": "^22.0.0",
+    "prettier": "^3.9.9",
+    "sirv-cli": "^3.0.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.11",
+    "vue-tsc": "^3.0.0"
+  }
+}
