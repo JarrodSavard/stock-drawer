@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { cpus } from 'node:os'
 import { validateDataset } from '../shared/importer'
 import { search } from '../app/lib/matching'
-const dataset = validateDataset(JSON.parse(await readFile('.local-data/stocks.json', 'utf8')))
+const dataset = validateDataset(JSON.parse(await readFile('public/data/history.json', 'utf8')))
 const patterns = {
   cup: [0.8, 0.61, 0.3, 0.12, 0.07, 0.16, 0.34, 0.65, 0.88],
   rise: [0.08, 0.22, 0.19, 0.4, 0.34, 0.63, 0.6, 0.75, 0.9],

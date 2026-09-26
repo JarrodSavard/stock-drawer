@@ -18,6 +18,7 @@ const {
   progress,
   error,
   source,
+  sourceKind,
   find,
   importFile,
   invalidate,
@@ -361,31 +362,48 @@ function howItWorks() {
             {{ meta ? 'Real history. In your browser.' : 'Bring your own history' }}
           </h2>
           <p v-if="meta">
-            {{ source }} · {{ meta.observations.toLocaleString() }} observations. Closing prices as
-            supplied; adjustment status is unverified.
+            {{ source }} · {{ meta.observations.toLocaleString() }} observations.
+            <template v-if="sourceKind === 'bundled'"
+              >Daily IEX prices, ready to explore. This is a historical snapshot, not a live market
+              feed.</template
+            >
+            <template v-else
+              >Closing prices as supplied; adjustment status is unverified. Your file stays in your
+              browser.</template
+            >
           </p>
           <p v-else>
-            This edition keeps stock data local. Load a historical CSV to start exploring. Your file
-            stays in your browser.
+            Retry the bundled history, or load a historical CSV to start exploring. Your file stays
+            in your browser.
           </p>
           <p v-if="error && !meta" class="data-error" role="status">{{ error }}</p>
           <details>
             <summary>Data source &amp; reuse</summary>
             <p>
-              The development dataset is
+              The default snapshot contains selected stocks from
+              <a href="https://hfdatalibrary.com/" target="_blank" rel="noreferrer"
+                >HF Data Library</a
+              >
+              (Ahmed Elkassabgi, 2026). Its compilation is shared under
               <a
-                href="https://www.kaggle.com/datasets/camnugent/sandp500"
+                href="https://creativecommons.org/licenses/by/4.0/"
                 target="_blank"
                 rel="noreferrer"
-                >Cam Nugent’s S&amp;P 500 history</a
-              >
-              (2013–2018). Kaggle lists CC0, but its upstream
-              <a href="https://iextrading.com/apiexhibita/" target="_blank" rel="noreferrer"
-                >IEX API terms</a
-              >
-              restrict redistribution. No prices are bundled in the public build. Prices are as
-              supplied, not verified as split or dividend adjusted. Dates and symbols reflect this
-              historical dataset, not today’s S&amp;P 500.
+                >CC BY 4.0</a
+              >. We retain only daily bars identified as IEX, from March 2022 onward, and convert
+              them to a compact browser dataset. These prices reflect trades on IEX only; they can
+              differ from market-wide closes. Prices are supplied in the provider’s cleaned version;
+              corporate-action adjustments have not been independently verified.
+              <a href="data/source.json" target="_blank">Snapshot coverage &amp; source manifest</a
+              >.
+            </p>
+            <p>
+              Data provided for free by IEX. By accessing or using IEX Historical Data, you agree to
+              the
+              <a href="https://www.iex.io/legal/hist-data-terms" target="_blank" rel="noreferrer"
+                >IEX Historical Data Terms of Use</a
+              >. Imported CSVs replace this snapshot for your current session and carry their own
+              source terms.
             </p>
             <p>
               CSV columns: <code>date,close,Name</code> (or <code>ticker</code>). Dates: YYYY-MM-DD.

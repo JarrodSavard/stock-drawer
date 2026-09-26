@@ -58,3 +58,9 @@ Progress reports actual stocks/windows checked. A full stock progress bar means 
 ## Tradeoffs
 
 Deep uses more CPU and is opt-in; Quick remains the default. Memory holds bounded candidate lists and one best candidate per stock, not every historical window. More sampling points would not create new prices. Larger historical datasets still need verified redistribution rights. CSV parsing remains synchronous inside the worker; search cancellation does not interrupt an import already parsing. Missing dates are judged against the observed union calendar, whose limitations remain documented in the provenance review.
+
+## Historical data boundary
+
+Development and production load the same static `data/history.json` in the worker. `useStockSearch` commits source identity only after the matching load succeeds, including after CSV imports and retries. No provider credential enters the client or its runtime configuration.
+
+Acquisition (`scripts/download-hf.py`), publication policy (`shared/hf-importer.ts`), generic validation (`shared/importer.ts`), and asset/manifest output (`scripts/bundle-hf.ts`) have separate responsibilities. The pure publication policy accepts only explicitly tagged IEX rows within the configured historical cutoff; HTTP and filesystem concerns remain outside it. The manifest records source and output hashes; attribution travels inside the price asset. Builds consume committed assets and never contact the provider.

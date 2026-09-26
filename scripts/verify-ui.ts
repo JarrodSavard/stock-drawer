@@ -1,6 +1,7 @@
 import { chromium, devices, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { mkdir, writeFile } from 'node:fs/promises'
+import manifest from '../public/data/source.json' with { type: 'json' }
 await mkdir('output/playwright', { recursive: true })
 const browser = await chromium.launch()
 const errors: string[] = []
@@ -8,7 +9,7 @@ const desktopContext = await browser.newContext({ viewport: { width: 1440, heigh
 const page = await desktopContext.newPage()
 page.on('pageerror', (e) => errors.push(e.message))
 await page.goto('http://127.0.0.1:3000/')
-await page.getByText('505 stocks loaded').waitFor()
+await page.getByText(`${manifest.stocks} stocks loaded`).waitFor()
 await page.screenshot({ path: 'output/playwright/desktop.png', fullPage: true })
 await expect(
   page.getByText('Created by', { exact: false }).filter({ hasText: 'Jarrod Savard' }),
@@ -46,7 +47,7 @@ const context = await browser.newContext({ ...devices['Pixel 7'] })
 const mobile = await context.newPage()
 mobile.on('pageerror', (e) => errors.push(e.message))
 await mobile.goto('http://127.0.0.1:3000/')
-await mobile.getByText('505 stocks loaded').waitFor()
+await mobile.getByText(`${manifest.stocks} stocks loaded`).waitFor()
 await mobile.screenshot({ path: 'output/playwright/mobile.png', fullPage: true })
 await mobile.getByRole('button', { name: 'Try a cup pattern' }).click()
 await mobile.getByRole('button', { name: 'Find matches', exact: true }).click()

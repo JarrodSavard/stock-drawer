@@ -15,12 +15,14 @@ export function useStockSearch() {
   const loading = ref(true),
     searching = ref(false),
     error = ref(''),
-    source = ref('Local historical dataset')
+    source = ref('HF Data Library')
+  const sourceKind = ref<'bundled' | 'csv'>('bundled')
   let worker: Worker | undefined,
     sequence = 0,
     loadId = 0,
     searchId = 0
-  let pendingSource = 'Local historical dataset'
+  let pendingSource = 'HF Data Library'
+  let pendingKind: 'bundled' | 'csv' = 'bundled'
   const config = useRuntimeConfig()
   function invalidate() {
     if (searching.value) post({ type: 'cancel', id: searchId })
@@ -39,9 +41,10 @@ export function useStockSearch() {
     loading.value = true
     meta.value = null
     loadId = ++sequence
-    pendingSource = import.meta.dev ? 'Local historical dataset' : 'Bundled historical dataset'
+    pendingSource = 'HF Data Library'
+    pendingKind = 'bundled'
     const base = config.app.baseURL
-    const url = import.meta.dev ? `${base}api/local-data` : `${base}data/stocks.json`
+    const url = `${base}data/history.json`
     post({ type: 'load', id: loadId, url })
   }
   function find(points: readonly Point[], period: Period, mode: SearchMode = 'quick') {
@@ -72,6 +75,7 @@ export function useStockSearch() {
       const csv = await file.text()
       if (id !== loadId) return
       pendingSource = file.name
+      pendingKind = 'csv'
       post({ type: 'import', id, csv })
     } catch {
       if (id === loadId) {
@@ -90,6 +94,7 @@ export function useStockSearch() {
         if (message.type === 'ready' && message.id === loadId) {
           meta.value = message
           source.value = pendingSource
+          sourceKind.value = pendingKind
           loading.value = false
           error.value = ''
         }
@@ -130,6 +135,7 @@ export function useStockSearch() {
     progress,
     error,
     source,
+    sourceKind,
     find,
     importFile,
     invalidate,

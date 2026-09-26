@@ -16,6 +16,7 @@
     "test:unit": "vitest run --exclude tests/integration/**",
     "test:integration": "vitest run tests/integration",
     "test:browser": "playwright test",
+    "data:bundle": "tsx scripts/bundle-hf.ts",
     "data:import": "tsx scripts/import-data.ts",
     "benchmark": "tsx scripts/benchmark.ts",
     "format:check": "prettier --check app shared scripts server tests *.ts *.json",

@@ -19,28 +19,42 @@ npm ci
 npm run dev
 ```
 
-Open http://127.0.0.1:3000. The development server binds to loopback only. This workspace already has the historical dataset in ignored `.local-data/`; fresh clones do not.
+Open http://127.0.0.1:3000. The development server binds to loopback only. **Real historical data loads automatically**, including on a fresh clone and a static host. No account, API key, or CSV is needed to try the app.
 
-To prepare a fresh local copy, download version 4 of [Cam Nugent's S&P 500 dataset](https://www.kaggle.com/datasets/camnugent/sandp500), extract `all_stocks_5yr.csv`, and run:
+## Bundled historical data
+
+The checked-in snapshot contains **100 selected stocks and 114,299 daily OHLC observations, March 7, 2022–September 24, 2026**, from [HF Data Library](https://hfdatalibrary.com/) (Ahmed Elkassabgi, 2026). It retains only observations explicitly identified as IEX Exchange HIST. The compilation is credited under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); IEX retains rights in the underlying data.
+
+**Data provided for free by IEX. By accessing or using IEX Historical Data, you agree to the [IEX Historical Data Terms of Use](https://www.iex.io/legal/hist-data-terms).**
+
+The data reflects IEX-only trading, not consolidated market closes. It is a selected historical sample, not today's S&P 500 or a live feed. Prices are supplied in the provider's cleaned version; adjustment status is not independently verified. Shape resemblance does not predict returns. See [the provenance review](docs/data-provenance.md) and [source manifest](public/data/source.json) for transformations, exclusions, checksums and limitations. The earlier restricted Kaggle development data remains excluded.
+
+### Refreshing the snapshot (maintainers only)
+
+Normal builds use the committed asset and require no secret or provider access. To acquire a new snapshot:
+
+1. Create a free HF Data Library account, verify your email, complete the profile, and save its API key in an ignored `.env` file using `.env.example` as a template.
+2. Install Python 3.12+ and `pyarrow==23.0.1` in a local environment (or `python -m pip install --target .local-data/python-deps pyarrow==23.0.1`).
+3. Review the selected tickers and cutoff in `scripts/data/hf-universe.json`, then run:
 
 ```sh
-npm run data:import -- path/to/all_stocks_5yr.csv
+python scripts/download-hf.py   # cached downloads; add --refresh to fetch again
+npm run data:bundle            # validate provenance and create public assets
+npm test
+npm run test:browser
+npm run typecheck
+npm run format:check
+npm run build
 ```
 
-The importer writes compact prices and a SHA-256 source manifest into **`.local-data/` only**. Nuxt serves these prices through a development-only endpoint. Restarting is unnecessary; use **Retry dataset** if the app was already open. Alternatively, use **Load a stock CSV** in the app; parsing and searching happen entirely in the browser, and the file is not uploaded or persisted after closing/reloading the page.
+The download script keeps complete provider files in ignored `.local-data/hf/`. The importer admits only tagged IEX rows inside the approved dates, rejects invalid prices or conflicting duplicates, and writes attribution plus SHA-256 checksums. Never commit `.env` or the original provider files. The site does not need the API key in Vercel; a provider outage or expired key cannot break an ordinary build.
 
-## Data and publication status
-
-**Real prices are intentionally excluded from the public build.** Kaggle labels the dataset CC0, but the publisher identifies the IEX API as the upstream source, whose third-party redistribution terms conflict with blanket republication. `--publish` is refused. This distinction is explained in the app, the public source manifest, and [the provenance review](docs/data-provenance.md).
-
-The local dataset contains **505 historical tickers, 619,040 observations, February 8, 2013–February 7, 2018**. It is not today's S&P 500 membership. Prices are closing prices as supplied, in USD; split/dividend adjustment status has not been verified. The matcher measures chart resemblance, not investment quality or future performance.
-
-The publishable version works with a visitor-supplied CSV. A frictionless public demo with bundled real prices still requires a dataset with confirmed redistribution rights. No fabricated stock prices are substituted. Synthetic observations exist only in automated tests.
+Visitors can optionally choose **Load a stock CSV** to replace the snapshot for their current session. It is parsed and searched entirely in the browser, never uploaded or saved. The generic `npm run data:import -- path/to/stocks.csv` utility remains local-only and refuses publication; its output is not automatically served by the app.
 
 ### CSV contract
 
 - Required columns: `date`, `close`, and `Name`, `ticker`, or `symbol` (case-insensitive).
-- Optional `open`, `high`, and `low` columns enable candle views. Values must be positive and the high/low must enclose both open and close. Missing or inconsistent candles are marked unavailable, while valid closes remain searchable. The import manifest counts unavailable candles (23 in the local Kaggle dataset). Close-only files continue to work in line mode.
+- Optional `open`, `high`, and `low` columns enable candle views. Values must be positive and the high/low must enclose both open and close. Missing or inconsistent candles are marked unavailable, while valid closes remain searchable. The import manifest counts unavailable candles. Close-only files continue to work in line mode.
 - One observation per row; ISO `YYYY-MM-DD` dates; finite positive USD closing prices.
 - UTF-8 BOM, quoted fields, CRLF, additional columns, and unsorted rows are accepted.
 - Identical observations are deduplicated. Conflicting duplicates, invalid dates/prices/tickers, and malformed rows fail with a row-specific message.
@@ -77,7 +91,7 @@ Heikin-Ashi uses `close = (open + high + low + close) / 4`, `open = (previous HA
 
 No database or server is needed for the static version. Data processing runs off the main thread. New queries invalidate previous responses; new datasets are validated before becoming active.
 
-See [architecture and SOLID decisions](docs/architecture.md) for the policy, scoring, execution and transport boundaries, and [testing strategy](docs/testing.md) for the unit/integration/E2E contracts. `AGENTS.md` records the project's ongoing SOLID and verification expectations. The GitHub Actions workflow runs checks without private market data.
+See [architecture and SOLID decisions](docs/architecture.md) for the policy, scoring, execution and transport boundaries, and [testing strategy](docs/testing.md) for the unit/integration/E2E contracts. `AGENTS.md` records the project's ongoing SOLID and verification expectations. The GitHub Actions workflow runs checks against fixtures and the bundled public snapshot without credentials.
 
 ## Verification
 
@@ -90,32 +104,34 @@ npm run format:check
 npm run benchmark
 npm run build
 npm run preview
-# In another terminal, with the local CSV available:
+# In another terminal:
 npm run verify:static
 ```
 
 Browser tests use isolated, explicitly synthetic fixtures and real workers. They cover drawing, imports/errors, snapshot capture, Quick/Deep selection and refinement, cancellation/replacement, distinct matches, chart modes, replay, keyboard controls, reduced motion, responsive overflow and accessibility. Vitest covers algorithms plus real parser/service/async-search integration, stale loads, cancellation and recovery. Two adversarial regressions were mutation-checked: removing baseline retention loses a known Quick winner, and removing within-stock yields prevents timely cancellation.
 
-With the development server and local dataset available, `npm run verify:ui` creates desktop/mobile screenshots under ignored `output/playwright/` and checks a real search. `npm run verify:static` confirms the public build has no private prices or API, imports the real CSV in-browser, returns five results, and makes no upload requests.
+With the development server running, `npm run verify:ui` creates desktop/mobile screenshots under ignored `output/playwright/` and checks a real search. `npm run verify:static` confirms automatic loading of real history, absence of restricted prices and the private API, five results, and zero upload requests.
 
 ### Performance measurement
 
-Measured September 25, 2026 on Windows, AMD Ryzen 9 7900, Node 24.19.0, using all 505 stocks. Each pattern/period/mode gets one warm-up and three measured synchronous searches; medians exclude data loading. Precomputing interpolation positions reduced repeated work without changing scores.
+Measured September 26, 2026 on Windows, AMD Ryzen 9 7900, Node 24.19.0, using the bundled 100 stocks and 114,299 observations. Each pattern/period/mode gets one warm-up and three measured synchronous searches; medians exclude data loading.
 
 | Trading days | Quick windows | Deep windows | Quick median range | Deep median range |
 | --- | ---: | ---: | ---: | ---: |
-| 20 | 122,336 | 609,126 | 95–99 ms | 493–564 ms |
-| 60 | 118,180 | 588,356 | 100–103 ms | 504–517 ms |
-| 120 | 112,018 | 557,559 | 97–102 ms | 461–544 ms |
+| 20 | 22,596 | 112,380 | 20–27 ms | 103–153 ms |
+| 60 | 21,788 | 108,340 | 21–29 ms | 104–155 ms |
+| 120 | 20,579 | 102,300 | 20–29 ms | 118–156 ms |
 
-Ranges cover cup, rise, and double-peak patterns. Deep reduced the best match's distance in seven of nine cases (5.9–17.8%); two retained the same best score. Every ranked top-five distance was no worse. These are shape-error reductions, not investment accuracy or probabilities. Browser elapsed time also includes cooperative scheduling; slower devices may differ. `npm run benchmark` writes a reproducible report to ignored `output/search-benchmark.json`; `npm run verify:ui` measures actual worker searches.
+Ranges cover cup, rise, and double-peak patterns. Every ranked top-five Deep distance was no worse than Quick. These are shape-error comparisons, not investment accuracy. Browser scheduling, device speed and initial transfer time add overhead. The JSON asset is 9.38 MB before compression (3.02 MB with gzip). `npm run benchmark` writes CPU/runtime, candidate counts, medians and scores to ignored `output/search-benchmark.json`; `npm run verify:ui` measures actual browser worker searches.
 
-The real Chromium worker measured **0.18 seconds Quick / 0.91 seconds Deep** for the 60-day cup sketch after loading data, including scheduling overhead. These are individual browser observations, separate from the CPU medians above.
+The Chromium worker completed the 60-day cup search in **0.03 seconds Quick / 0.23 seconds Deep** after loading the snapshot, including cooperative scheduling. These are individual local measurements, not a guarantee for every device.
 
 ## Static hosting
 
 Run `npm run build`, then upload **only `.output/public/`** to a static host. `npm run preview` serves that directory at http://127.0.0.1:4173. Restart the preview after rebuilding because it caches the asset listing. No server functions or credentials are required. Never upload the project root or `.local-data/`.
 
-For a subdirectory deployment, set `NUXT_APP_BASE_URL=/your-path/` when building. The worker's asset requests honor this base. Public deployment has not been performed.
+For Vercel, connect the repository and deploy `main`. `vercel.json` sets the build command to `npm run build` and the output directory to `.output/public`. A push to the connected production branch triggers a new build; no environment variables are required for this snapshot.
 
-The generated output includes the app and provenance metadata, not the private dataset. To ship bundled prices later, first resolve redistribution rights, preserve attribution, and explicitly revise the import/publication policy.
+For a subdirectory deployment, set `NUXT_APP_BASE_URL=/your-path/` when building. The worker's asset requests honor this base.
+
+The generated output includes the app, the cleared IEX snapshot and attribution. Original provider downloads and the older restricted dataset stay private.

@@ -1,5 +1,7 @@
 import { chromium, expect } from '@playwright/test'
 import { existsSync } from 'node:fs'
+import manifest from '../public/data/source.json' with { type: 'json' }
+const baseURL = process.env.STOCK_DRAWER_PREVIEW_URL ?? 'http://127.0.0.1:4173'
 if (existsSync('.output/public/data/stocks.json'))
   throw new Error('Restricted prices unexpectedly bundled in the static build.')
 const browser = await chromium.launch()
@@ -11,12 +13,10 @@ page.on('request', (r) => {
   if (r.method() !== 'GET') uploads.push(`${r.method()} ${r.url()}`)
 })
 try {
-  await page.goto('http://127.0.0.1:4173/')
-  await expect(page.getByText('Bring your own history')).toBeVisible()
-  const privateResponse = await page.request.get('http://127.0.0.1:4173/api/local-data')
+  await page.goto(baseURL)
+  await expect(page.getByText(`${manifest.stocks} stocks loaded`)).toBeVisible({ timeout: 20_000 })
+  const privateResponse = await page.request.get(`${baseURL}/api/local-data`)
   expect(privateResponse.status()).toBe(404)
-  await page.getByLabel('Load a stock CSV').setInputFiles('.local-data/all_stocks_5yr.csv')
-  await expect(page.getByText('505 stocks loaded')).toBeVisible({ timeout: 20_000 })
   await page.getByRole('button', { name: 'Try a cup pattern' }).click()
   await page.getByRole('button', { name: 'Find matches', exact: true }).click()
   await expect(page.getByTestId('match-result')).toHaveCount(5)
@@ -39,7 +39,7 @@ try {
   expect(uploads).toEqual([])
   expect(errors).toEqual([])
   console.log(
-    'Static build: no bundled prices or local API; CSV Quick/Deep search produces five matches; both candle views replay 60 observations; zero uploads and runtime errors.',
+    'Static build: bundled IEX history loads automatically; no restricted dataset or local API; Quick/Deep search produces five matches; both candle views replay 60 observations; zero uploads and runtime errors.',
   )
 } finally {
   await browser.close()

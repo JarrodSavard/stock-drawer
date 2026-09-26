@@ -1,14 +1,527 @@
 {
   "schemaVersion": 1,
-  "status": "redistribution-unresolved",
-  "title": "S&P 500 stock data",
-  "publisher": "Cam Nugent",
-  "url": "https://www.kaggle.com/datasets/camnugent/sandp500",
-  "version": 4,
-  "publisherLicense": "CC0: Public Domain",
-  "upstream": "IEX API, according to the publisher's dataset description",
-  "upstreamTerms": "https://iextrading.com/apiexhibita/",
-  "reason": "The publisher's CC0 label does not resolve the upstream restriction on redistributing API data received through a third party.",
-  "bundledPrices": false,
-  "verifiedOn": "2026-09-25"
+  "status": "bundled-iex-history",
+  "bundledPrices": true,
+  "title": "HF Data Library — selected IEX daily history",
+  "creator": "Ahmed Elkassabgi (2026)",
+  "url": "https://hfdatalibrary.com/",
+  "citation": "https://doi.org/10.5281/zenodo.19501605",
+  "compilationLicense": "https://creativecommons.org/licenses/by/4.0/",
+  "upstreamTerms": "https://www.iex.io/legal/hist-data-terms",
+  "upstreamNotice": "Data provided for free by IEX. By accessing or using IEX Historical Data, you agree to the IEX Historical Data Terms of Use.",
+  "changes": "Selected tickers; retained only source=iex from 2022-03-07 through the cutoff; converted daily clean Parquet bars into indexed JSON. No fabricated or interpolated prices.",
+  "verifiedOn": "2026-09-26",
+  "through": "2026-09-24",
+  "from": "2022-03-07",
+  "to": "2026-09-24",
+  "stocks": 100,
+  "observations": 114299,
+  "excludedRows": 449532,
+  "bytes": 9377321,
+  "sha256": "a04585ad6283ce8715404e0d81b932f5430e8df0daa922835f1d934c0ea4525f",
+  "prices": "USD, daily clean bars as supplied. IEX-only trading, not consolidated market closes. Adjustment status not independently verified.",
+  "calendar": "Union of retained observed dates. Missing per-stock sessions break windows; globally absent sessions cannot be inferred.",
+  "limitations": "Selected stock sample, not an index or live screening universe. Provider outlier filtering and incomplete trade-correction handling can affect prices. Shape resemblance is not a prediction.",
+  "sources": [
+    {
+      "ticker": "AAPL",
+      "parquetSha256": "5e27651fdb85a5c88269523caa75561c4e0887d22cf9e425a13f8787b6c62fab",
+      "observations": 1143
+    },
+    {
+      "ticker": "MSFT",
+      "parquetSha256": "4583528c39197db15577364559eac2af0d3870d08796b5a5b2b9403d1a85f61a",
+      "observations": 1143
+    },
+    {
+      "ticker": "AMZN",
+      "parquetSha256": "4042eb5331646451293db47cf0401c2a88a610bc45b3eda6f623a063474c6316",
+      "observations": 1143
+    },
+    {
+      "ticker": "GOOGL",
+      "parquetSha256": "7b80559ddcdd304c78c010d4615e6974fe3c4caa248299f6e39da7c789106660",
+      "observations": 1143
+    },
+    {
+      "ticker": "ADSK",
+      "parquetSha256": "ae7ff7c8be6ec2fa152cd76623334b16f85fd99fb08739c0befcee6a278fee56",
+      "observations": 1143
+    },
+    {
+      "ticker": "NVDA",
+      "parquetSha256": "bf732900e628f9098d2258976dd2f411a02196b79d4378d70b1b3b2b1f11cc0f",
+      "observations": 1143
+    },
+    {
+      "ticker": "TSLA",
+      "parquetSha256": "0344ee1e761ec6257e174b154bf7b8e58f60956c21928923b615bcfea2a16553",
+      "observations": 1143
+    },
+    {
+      "ticker": "AVGO",
+      "parquetSha256": "f676c0c51a2624d9c487a3304c86f36d1ad2e005622be9794ebe4e30c1e02150",
+      "observations": 1143
+    },
+    {
+      "ticker": "ORCL",
+      "parquetSha256": "76e9b0dbad2446cfd46bc6ed1392a8d2aad99727ecb3d3165fd208f88f690de9",
+      "observations": 1143
+    },
+    {
+      "ticker": "ADBE",
+      "parquetSha256": "63e81f87fa2ae145797f88253f29b8799e96678eaeeece6f003e2db74ba52a69",
+      "observations": 1143
+    },
+    {
+      "ticker": "CRM",
+      "parquetSha256": "09a0d448e118278b951119cad05b27ea57584d9e83b4a296cae9c619fe65de6e",
+      "observations": 1143
+    },
+    {
+      "ticker": "AMD",
+      "parquetSha256": "01625ad72cf8ec5575165b4ce27a1785829061e2d924d2a4826f80222f3ebf35",
+      "observations": 1143
+    },
+    {
+      "ticker": "INTC",
+      "parquetSha256": "f0c33dda57ddfafa6271cf2c58a5e6beb5b894c7ae018173b12f8ae7ff70e935",
+      "observations": 1143
+    },
+    {
+      "ticker": "QCOM",
+      "parquetSha256": "b19e1edb4f11d9923ad6f87c768419be09f65c56f81bef0b240b553e824bd7bf",
+      "observations": 1143
+    },
+    {
+      "ticker": "TXN",
+      "parquetSha256": "f7aa4c3103dc3116b78333f736c0d95e2a55c95d75d1f69039d104563c573c34",
+      "observations": 1143
+    },
+    {
+      "ticker": "AMAT",
+      "parquetSha256": "41a2dfe3bd282d6ac786c450d1455f5fbe6a8d53f11d3739f83cc54ee94190c3",
+      "observations": 1143
+    },
+    {
+      "ticker": "MU",
+      "parquetSha256": "93eba56d0b64878a69ef161bc1bae5204c96545ff1946d5b701a6689b088ae25",
+      "observations": 1143
+    },
+    {
+      "ticker": "LRCX",
+      "parquetSha256": "9530c692ef16149b5d267af9e4552dc6a33313c07365e72453cf683da26935ba",
+      "observations": 1143
+    },
+    {
+      "ticker": "KLAC",
+      "parquetSha256": "ac806e0aa2a0ffb0e705d785f00f14ea167dcce57f4bb509912c920c8399624a",
+      "observations": 1143
+    },
+    {
+      "ticker": "CSCO",
+      "parquetSha256": "6c18edb7f798288ca18531cac7b27753f6555c1dcf8ee0ab5a8886395133b836",
+      "observations": 1143
+    },
+    {
+      "ticker": "IBM",
+      "parquetSha256": "0ab68ff43ee1b0ed404f6b90df436654dc05f6b1e7dd632b49a323852fa142ac",
+      "observations": 1143
+    },
+    {
+      "ticker": "ACN",
+      "parquetSha256": "6f79ed10374cb5d469df24e443311941b61429e787c9807672d8365ba8f5fe71",
+      "observations": 1143
+    },
+    {
+      "ticker": "NOW",
+      "parquetSha256": "6bea8a1f7321cb95be823b3f119f61fea8af12bac65fe8b4fd49715bafed5939",
+      "observations": 1143
+    },
+    {
+      "ticker": "INTU",
+      "parquetSha256": "1a12fec773b1e73b0d6750df3c1197505e252519d9b0a520d1d3655e81a45c9c",
+      "observations": 1143
+    },
+    {
+      "ticker": "ADP",
+      "parquetSha256": "0d220b21a2331fcc9257ce9b551c0f704b2a91282fba13085bbfeff1deb47822",
+      "observations": 1143
+    },
+    {
+      "ticker": "PANW",
+      "parquetSha256": "56c2cc26c84fed926191dc92565f2327fdcfe4237f59aebda44a36dc74decdfe",
+      "observations": 1143
+    },
+    {
+      "ticker": "CRWD",
+      "parquetSha256": "ff6ce1317e5458819ae24ab06ebcd8f93549e90609488c672a0d08c0dfbc8c5c",
+      "observations": 1143
+    },
+    {
+      "ticker": "SNPS",
+      "parquetSha256": "91d96760b3416a456fbd9c2b95bb7e276d2f4887b1d2c7be9b431a3ea8f6e5b1",
+      "observations": 1143
+    },
+    {
+      "ticker": "CDNS",
+      "parquetSha256": "fb1a2c5c4dc6f144a1f570e841e20ae6604e2f6ea1ff1cee79ad67cdab6111dd",
+      "observations": 1143
+    },
+    {
+      "ticker": "ANET",
+      "parquetSha256": "1f2b0d4456079d09020750917cb43067cb4a8a107debfc9031287e98a91a49f5",
+      "observations": 1143
+    },
+    {
+      "ticker": "JPM",
+      "parquetSha256": "cf58a4ffb9e216b1f56968a5ada8e6c3810c5fb64cc8cb76d7b2ec57cfc9def0",
+      "observations": 1143
+    },
+    {
+      "ticker": "BAC",
+      "parquetSha256": "c321563c933aa79db6415704b03bc67bbe9188c29b5ae1546e5935c0ac3de249",
+      "observations": 1142
+    },
+    {
+      "ticker": "WFC",
+      "parquetSha256": "5c57810e2791d0046dd08b10c4029725b5eef726090060a11f637556d9e45b49",
+      "observations": 1143
+    },
+    {
+      "ticker": "C",
+      "parquetSha256": "5939b34c4bb5beca7462d5af5db406f690f1c1104dc2198072c7f72591f08a4e",
+      "observations": 1143
+    },
+    {
+      "ticker": "GS",
+      "parquetSha256": "c20242c8181048e29c465658be02900fd761cdac913388569a746a26937cb292",
+      "observations": 1143
+    },
+    {
+      "ticker": "MS",
+      "parquetSha256": "a0c6a6a650230e027d6a0b825b60d3c43fc8e70a7d2f553f287ef3950a5b6d0c",
+      "observations": 1143
+    },
+    {
+      "ticker": "AXP",
+      "parquetSha256": "f3cb945c78d2a890e2b40b1530218661a756500a4b6bb86fa804db8b80c825e9",
+      "observations": 1143
+    },
+    {
+      "ticker": "V",
+      "parquetSha256": "c36ce7cd771ae8485f9a0400e41cd2e100ec31881d0bc863f96745f5219dd875",
+      "observations": 1143
+    },
+    {
+      "ticker": "MA",
+      "parquetSha256": "c5231de4fb938b508a94bf1950167defa6f82147d427d04f928796aeb3e717ff",
+      "observations": 1143
+    },
+    {
+      "ticker": "PYPL",
+      "parquetSha256": "24517f3185ecce49b010a3b7d8a0051dc34d89efe6677443f7fe13adbf5f74a3",
+      "observations": 1143
+    },
+    {
+      "ticker": "BLK",
+      "parquetSha256": "539017283c3fe3b1d2e97a5a19cc1b7e7da18443657da52fd15e7570771ce8ad",
+      "observations": 1143
+    },
+    {
+      "ticker": "SCHW",
+      "parquetSha256": "ebd89731ea1810d110bd82d9dda1f541bbff548b0c8004c0d7d469e49f521971",
+      "observations": 1143
+    },
+    {
+      "ticker": "SPGI",
+      "parquetSha256": "ba442228c4174d2921d21f1af5f4ce7dbfa474ed6dcca438b6e6d16db2966f19",
+      "observations": 1143
+    },
+    {
+      "ticker": "CME",
+      "parquetSha256": "fbc5e6bc8b7f589071546b578a37c94a03d35c7caed8ef64d9919bb2059c3176",
+      "observations": 1143
+    },
+    {
+      "ticker": "ICE",
+      "parquetSha256": "eed97162327d2ed0d3703b23f96b6322dfcd889b619efd3d7dbd75018aeec60c",
+      "observations": 1143
+    },
+    {
+      "ticker": "UNH",
+      "parquetSha256": "bf13f6efb3a036c27798d3aebf1cfa8397afb5dc9cbd86b6312ca2f207e2df7c",
+      "observations": 1143
+    },
+    {
+      "ticker": "JNJ",
+      "parquetSha256": "45e8d8bfba677781c222136d8545e1cdbbda0ace878896bb1bf6e5bc14c1f1ea",
+      "observations": 1143
+    },
+    {
+      "ticker": "LLY",
+      "parquetSha256": "0cbaca702a98bb0889e709e0bc2ed26539aad0606b5390ae12c22c3d025feb5a",
+      "observations": 1143
+    },
+    {
+      "ticker": "ABBV",
+      "parquetSha256": "e7972417eba178dc723c70c9dff12095611d183b94383789b65657cdfd7fe8c7",
+      "observations": 1143
+    },
+    {
+      "ticker": "MRK",
+      "parquetSha256": "4dfbe6692f1575eab4741da6945bc525c9714c32f3e664f7395ba80248e67e56",
+      "observations": 1143
+    },
+    {
+      "ticker": "PFE",
+      "parquetSha256": "3be13b6f22e6e869dde2e7b1516e993eb2728c4e2df155ac4bee2c59332a4821",
+      "observations": 1143
+    },
+    {
+      "ticker": "TMO",
+      "parquetSha256": "07a87f0161ea2a8bc244b406a5747dbc779013ad6b04c93ff89cc175dbea18f6",
+      "observations": 1143
+    },
+    {
+      "ticker": "ABT",
+      "parquetSha256": "67baea697f10cd8626b5a3780ce9cc5c34aa4333e236b62f64a22e46bdf3513c",
+      "observations": 1143
+    },
+    {
+      "ticker": "DHR",
+      "parquetSha256": "91fc8beeac0a3f32c6b9d108cea21e34bc7cc7cd4569005d3297aaeb905672b8",
+      "observations": 1143
+    },
+    {
+      "ticker": "AMGN",
+      "parquetSha256": "c6cb800bb7e57cb611c464564ccb610b00c56fb9afcc60763b416801c7d673b5",
+      "observations": 1143
+    },
+    {
+      "ticker": "GILD",
+      "parquetSha256": "5b820b888177a9ecab524d8e17eb5f62b65cba31ba02a64b62df6dea4b0bd8c3",
+      "observations": 1143
+    },
+    {
+      "ticker": "ISRG",
+      "parquetSha256": "ae65f841790be75c97b76c1de9a1e05194d382e95993c0c1fcaf86dc132230d5",
+      "observations": 1143
+    },
+    {
+      "ticker": "VRTX",
+      "parquetSha256": "beb51db9442063a7b985c5cfb8c56805785605468a9364a67bac8cdae7f1a9b3",
+      "observations": 1143
+    },
+    {
+      "ticker": "REGN",
+      "parquetSha256": "2784b4e739969080137c640f7b7007135cd6eba285add2eeb82a2a3da8e3846d",
+      "observations": 1143
+    },
+    {
+      "ticker": "CVS",
+      "parquetSha256": "05216e44aae773f3eca3023e2168e7b74344ff99b7c8b7c489fb2b3b30a1c6b7",
+      "observations": 1143
+    },
+    {
+      "ticker": "WMT",
+      "parquetSha256": "a86e45316cdd33859d3291c87db94b1493e3e0925d944673b260bb4ee2416636",
+      "observations": 1143
+    },
+    {
+      "ticker": "COST",
+      "parquetSha256": "fba6ad35eed9a2698e444d113132ea81eaf3a9bf8baeb088c9bace6410e893bf",
+      "observations": 1143
+    },
+    {
+      "ticker": "HD",
+      "parquetSha256": "34d063117524a23d955c923acd77d97f59237888901140488c398dba9495f7c1",
+      "observations": 1143
+    },
+    {
+      "ticker": "LOW",
+      "parquetSha256": "a8ba7a93470f0d145228576d6152cc11d9cbf877c6c34a30ccc16e858f7e006e",
+      "observations": 1143
+    },
+    {
+      "ticker": "TGT",
+      "parquetSha256": "70d21e85bf7dd0c091332abdb7c1a1b62b43737937d8946c85c18739b7d6c6f4",
+      "observations": 1143
+    },
+    {
+      "ticker": "PG",
+      "parquetSha256": "fb7ff7fb2804df90509ffa82c434502b5786dd6950944bc41511361c7db321ad",
+      "observations": 1143
+    },
+    {
+      "ticker": "KO",
+      "parquetSha256": "a088bc14beddc9cc6229a65eedef7cc1418289fdb2b3c12ceaf629f238c6d10a",
+      "observations": 1143
+    },
+    {
+      "ticker": "PEP",
+      "parquetSha256": "d91c5956bd29e0796123bea1f28cb6a1db3ab20d27c906d4859873875a4cd87e",
+      "observations": 1143
+    },
+    {
+      "ticker": "MDLZ",
+      "parquetSha256": "02b1f3fb9df5bd07c35a05a05c2d813c150ce5f51930f7f82ffdf37302b4c43a",
+      "observations": 1143
+    },
+    {
+      "ticker": "CL",
+      "parquetSha256": "9ef567aeebec2a198e28b9dddc1e900450b225128726c3a4048cd4c4509437ae",
+      "observations": 1143
+    },
+    {
+      "ticker": "MCD",
+      "parquetSha256": "3038309b7d77de8ad863d89c58ef43d7000bf44a1f1b637f2e63e086786dc967",
+      "observations": 1143
+    },
+    {
+      "ticker": "SBUX",
+      "parquetSha256": "506a36fb75661a1db515e91b713b3315e8f9a541c60201c1860eff7fc0006499",
+      "observations": 1143
+    },
+    {
+      "ticker": "NKE",
+      "parquetSha256": "00d5da1af43b82ada265dcf94b290d8f465d1e3ba74d3a2694b7909b48be14fa",
+      "observations": 1143
+    },
+    {
+      "ticker": "DIS",
+      "parquetSha256": "1f18de9684dc1151755a8ad8c5f543c808786c41378440bfdac64a92303017d8",
+      "observations": 1143
+    },
+    {
+      "ticker": "NFLX",
+      "parquetSha256": "e1ca13fc4f803f672d7dfdd59c813fa46b29dacd7d0e9892175d73ef10adad50",
+      "observations": 1143
+    },
+    {
+      "ticker": "CMCSA",
+      "parquetSha256": "8b9c026594b6a71fc0d06b793f58dbafc431e2af40dda18bb35a7ac0f641a993",
+      "observations": 1143
+    },
+    {
+      "ticker": "BKNG",
+      "parquetSha256": "923f39365cfa4f9f68567ac86e92eed8a4adc2fb3f25943117586cb875cc1f03",
+      "observations": 1143
+    },
+    {
+      "ticker": "MAR",
+      "parquetSha256": "55fcacac2608c4b39f7f7a064de6e90b3053b905cbde72fd38fbff5d0c30f859",
+      "observations": 1143
+    },
+    {
+      "ticker": "ABNB",
+      "parquetSha256": "aaf55ed59cf68888a54e550af847c8ec9066ac9c98e1584b03f497f6aefdeb05",
+      "observations": 1143
+    },
+    {
+      "ticker": "UBER",
+      "parquetSha256": "d7f36ae55268dd1e7707f568e6356b0d32248867f93ca1a886b0b08ff56468ec",
+      "observations": 1143
+    },
+    {
+      "ticker": "XOM",
+      "parquetSha256": "65cb137a8a9bc2d4b409bf321635a9869b2105f56b88125fe608fefa7b62764a",
+      "observations": 1143
+    },
+    {
+      "ticker": "CVX",
+      "parquetSha256": "1ac3dbbb4a5774381c228f12b65a02d77b447fa4ac1c591f15e025ab92d2a86a",
+      "observations": 1143
+    },
+    {
+      "ticker": "COP",
+      "parquetSha256": "df03356d4daf978136002da4ef5261c4d1be2e05d8004511e54d4066ed82888b",
+      "observations": 1143
+    },
+    {
+      "ticker": "SLB",
+      "parquetSha256": "360b1a2addd7863057e36998c237b1a4b3d832aefef7c807e97180470fd9f8a6",
+      "observations": 1143
+    },
+    {
+      "ticker": "EOG",
+      "parquetSha256": "b075a3d5ce170c918b7906d21292373531b29b4341c05ca9ec7ef0c785e7e7ff",
+      "observations": 1143
+    },
+    {
+      "ticker": "CAT",
+      "parquetSha256": "85b11feec90b83f29cba6f1d86e5ac48c4606b5986d72a22b190d3f46f1a9935",
+      "observations": 1143
+    },
+    {
+      "ticker": "DE",
+      "parquetSha256": "90c35730d445993a60ea857aff9b303ebec34dc9e5c38d1b8061e21da52d3dad",
+      "observations": 1143
+    },
+    {
+      "ticker": "HON",
+      "parquetSha256": "f9f4c8f04d4fcf6b195949f8903cfa577b47eebc9eb7ebccc0e30c38621a1340",
+      "observations": 1143
+    },
+    {
+      "ticker": "GE",
+      "parquetSha256": "d65ba91435c768a20c52f5997f860073654457312c4efa45d7b0fc2b08e7f4d9",
+      "observations": 1143
+    },
+    {
+      "ticker": "BA",
+      "parquetSha256": "546b8fef8cf7d268c68f8869bdfc5e7735f00745a386ac168f23f909823db646",
+      "observations": 1143
+    },
+    {
+      "ticker": "RTX",
+      "parquetSha256": "6f21c8bbb4eca7b8e5908ecd43bf8ba5f79abccd6634264b4011cd26a418daef",
+      "observations": 1143
+    },
+    {
+      "ticker": "LMT",
+      "parquetSha256": "c74c109dc13b737f21ecf5728a657e4ffded247bfb9c2ec1bd89ce70b9ab842b",
+      "observations": 1143
+    },
+    {
+      "ticker": "UPS",
+      "parquetSha256": "259b2727e62b341fab34fb62a2cc12c09c05b8c1f4db541ab463a70c9381ba96",
+      "observations": 1143
+    },
+    {
+      "ticker": "UNP",
+      "parquetSha256": "8d4fe29c9aef2fec25cd0dac80e09f88ffe970dc264af89d5dcf8043f0901960",
+      "observations": 1143
+    },
+    {
+      "ticker": "FDX",
+      "parquetSha256": "f66971a0e427b378626940f467453fe80598af042a026c779b3c830a6e0b46d1",
+      "observations": 1143
+    },
+    {
+      "ticker": "NEE",
+      "parquetSha256": "35af3d07ef6c63a6f42457cd4d90d75b26df53d281184a5d4a3cc0199085a620",
+      "observations": 1143
+    },
+    {
+      "ticker": "DUK",
+      "parquetSha256": "b6ba326a31f1218a2a921206ee049ebc8ca35f07e7b8678a4af963264d4d6f70",
+      "observations": 1143
+    },
+    {
+      "ticker": "SO",
+      "parquetSha256": "2f40c79c15dfa30158f98fb199a8a5e96fdd8745b593c3883b00da80f39bdcf8",
+      "observations": 1143
+    },
+    {
+      "ticker": "PLD",
+      "parquetSha256": "46444745e1135db42ad2211b164deeca0e267078d38b64008a573041f59f7e58",
+      "observations": 1143
+    },
+    {
+      "ticker": "AMT",
+      "parquetSha256": "4d500412a6607fe2bac0c55c8c595c3075803c6477025f1cb69bb7c34da0cc0c",
+      "observations": 1143
+    }
+  ]
 }

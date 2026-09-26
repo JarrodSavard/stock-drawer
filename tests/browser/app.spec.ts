@@ -19,7 +19,7 @@ const dataset = {
   })),
 }
 test.beforeEach(async ({ page }) => {
-  await page.route('**/api/local-data', (route) => route.fulfill({ json: dataset }))
+  await page.route('**/data/history.json', (route) => route.fulfill({ json: dataset }))
   await page.goto('/')
   await expect(page.getByText('6 stocks loaded')).toBeVisible()
 })
@@ -68,7 +68,7 @@ test('Deep search stays interactive, cancels and accepts a replacement query', a
       close: longerDates.map((_, i) => 100 + i / 100 + Math.sin(i / (8 + s)) * 10),
     })),
   }
-  await page.route('**/api/local-data', (route) => route.fulfill({ json: large }))
+  await page.route('**/data/history.json', (route) => route.fulfill({ json: large }))
   await page.reload()
   await expect(page.getByText('60 stocks loaded')).toBeVisible()
   await page.getByRole('button', { name: 'Deep search', exact: true }).click()
@@ -130,7 +130,7 @@ test('a complete freehand stroke becomes searchable', async ({ page }) => {
   await expect(page.getByAltText('Your captured drawing')).toBeVisible()
 })
 test('failed loading offers local import without invented results', async ({ page }) => {
-  await page.route('**/api/local-data', (route) => route.fulfill({ status: 404 }))
+  await page.route('**/data/history.json', (route) => route.fulfill({ status: 404 }))
   await page.reload()
   await expect(page.getByText('Bring your own history')).toBeVisible()
   await page.getByRole('button', { name: 'Try a cup pattern' }).click()
@@ -211,7 +211,7 @@ test('retry restores the dataset attribution after an invalid CSV', async ({ pag
   })
   await expect(page.getByText(/close must be a positive/)).toBeVisible()
   await page.getByRole('button', { name: 'Retry dataset' }).click()
-  await expect(page.getByText(/Local historical dataset ·/)).toBeVisible()
+  await expect(page.getByText(/HF Data Library ·/)).toBeVisible()
 })
 test('touch drawing captures a searchable stroke without scrolling the page', async ({ page }) => {
   const canvas = page.getByTestId('drawing-canvas')

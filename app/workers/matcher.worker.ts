@@ -7,7 +7,7 @@ const service = createSearchService({
   loadDataset: async (url, signal) => {
     const response = await fetch(url, { signal })
     if (!response.ok)
-      throw new Error('No bundled dataset. Load a stock CSV to explore real history.')
+      throw new Error('The historical dataset could not load. Retry, or choose a stock CSV.')
     return validateDataset(await response.json())
   },
 })
